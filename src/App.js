@@ -32,14 +32,21 @@ function Button({ children, onClick }) {
 
 export default function App() {
   const [isOpen, setIsOpen] = useState(false);
+  const [product, setProduct] = useState(initialFriends);
+
   function handleToggle() {
     setIsOpen(!isOpen);
   }
+
+  function handleNewProduct(product) {
+    setProduct((products) => [...products, product]);
+  }
+
   return (
     <div className="app">
       <div className="sidebar">
-        <List data={initialFriends} />
-
+        <List product={product} />
+        {/* onNewProduct={handleNewProduct} */}
         {isOpen && <Form />}
 
         <Button onClick={handleToggle}>
@@ -55,15 +62,13 @@ function Header() {
   return <h1>My shopping list.....</h1>;
 }
 
-function List({ data }) {
+function List({ product }) {
   return (
-    <div>
-      <ul>
-        {data.map((product) => (
-          <Product key={product.id} product={product} />
-        ))}
-      </ul>
-    </div>
+    <ul>
+      {product.map((product) => (
+        <Product key={product.id} product={product} />
+      ))}
+    </ul>
   );
 }
 
@@ -80,14 +85,25 @@ function Product({ product }) {
   );
 }
 
-function Form() {
+function Form({ onNewProduct }) {
+  const [name, setName] = useState("");
+  const [image, setImage] = useState("");
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    // const newProduct = { name, balance, image, id };
+    setImage("");
+    setName("");
+  }
+
   return (
-    <form className="form-add-friend">
+    <form className="form-add-friend" onSubmit={handleSubmit}>
       <label> Name</label>
-      <input />
+      <input value={name} onChange={(e) => setName(e.target.value)} />
 
       <label>image</label>
-      <input />
+      <input value={image} onChange={(e) => setImage(e.target.value)} />
       <Button>Add</Button>
     </form>
   );
