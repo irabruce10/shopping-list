@@ -3,22 +3,32 @@ import { useState } from "react";
 
 const initialFriends = [
   {
+    id: 11327843,
+    name: "Bruce",
+    image: "https://i.pravatar.cc/48?u=11327843",
+    balance: 0,
+    pin: 1111,
+  },
+  {
     id: 118836,
     name: "Clark",
     image: "https://i.pravatar.cc/48?u=118836",
     balance: -7,
+    pin: 2222,
   },
   {
     id: 933372,
     name: "Sarah",
     image: "https://i.pravatar.cc/48?u=933372",
     balance: 20,
+    pin: 3333,
   },
   {
     id: 499476,
     name: "Anthony",
     image: "https://i.pravatar.cc/48?u=499476",
     balance: 0,
+    pin: 4444,
   },
 ];
 
@@ -52,7 +62,7 @@ export default function App() {
   return (
     <div className="app">
       <div className="sidebar">
-        <List product={product} onSelect={handleSelect} />
+        <List product={product} onSelect={handleSelect} select={select} />
 
         {isOpen && <Form onNewProduct={handleNewProduct} />}
 
@@ -67,28 +77,40 @@ export default function App() {
   );
 }
 
+function Login() {
+  return <h1>Login</h1>;
+}
+
 function Header() {
   return <h1>My shopping list.....</h1>;
 }
 
-function List({ product, onSelect }) {
+function List({ product, onSelect, select }) {
   return (
     <ul>
       {product.map((product) => (
-        <Product key={product.id} product={product} onSelect={onSelect} />
+        <Product
+          key={product.id}
+          product={product}
+          onSelect={onSelect}
+          select={select}
+        />
       ))}
     </ul>
   );
 }
 
-function Product({ product, onSelect }) {
+function Product({ product, onSelect, select }) {
+  let isSel = product.id === select.id;
   return (
     <div>
-      <li>
+      <li className={isSel ? "selected" : ""}>
         <img src={product.image} alt={product.image} />
         <h3>{product.name}</h3>
         <p>{product.balance}</p>
-        <Button onClick={() => onSelect(product)}>Select</Button>
+        <Button onClick={() => onSelect(product)}>
+          {isSel ? "Close" : "Select"}
+        </Button>
       </li>
     </div>
   );
