@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "../component/index.css";
 
 const products = [
@@ -59,32 +59,57 @@ const products = [
 ];
 
 export default function ShoppingCart() {
+  const [isOpen, setIsOpen] = useState(null);
+  const [product, setProduct] = useState("");
+  const [newProduct, setNewProduct] = useState([]);
+
+  function showCart(product) {
+    setIsOpen(product);
+  }
+
+  function addToCart() {
+    console.log(product);
+    setIsOpen(true);
+  }
+
   return (
     <div className="App">
-      <ProductList />
+      {isOpen && <Logo />}
+      <ProductList onAddToCart={addToCart} />
     </div>
   );
 }
 
-function ProductList() {
+function Logo() {
+  return <h1>Cart</h1>;
+}
+
+function ProductList({ onAddToCart }) {
   return (
     <div>
       <ul className="products">
         {products.map((product) => (
-          <Product key={product.id} product={product} />
+          <Product
+            key={product.id}
+            product={product}
+            onAddToCart={onAddToCart}
+          />
         ))}
       </ul>
     </div>
   );
 }
 
-function Product({ product }) {
+function Product({ product, onAddToCart }) {
   return (
     <li className="product">
       <img className="product-image" src={product.image} alt={product.name} />
       <h1>{product.name}</h1>
       <p>{product.description}</p>
       <p>{product.price}</p>
+      <button className="button" onClick={onAddToCart}>
+        Add to cart
+      </button>
     </li>
   );
 }
