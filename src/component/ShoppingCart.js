@@ -74,11 +74,11 @@ export default function ShoppingCart() {
     if (exist) {
       setNewProduct(
         newProduct.map((ex) =>
-          ex.id === product.id ? { ...exist, id: exist.id + 1 } : ex
+          ex.id === product.id ? { ...exist, qty: exist.qty + 1 } : ex
         )
       );
     } else {
-      setNewProduct([...newProduct, { ...product, id: 1 }]);
+      setNewProduct([...newProduct, { ...product, qty: 1 }]);
     }
   }
 
@@ -139,7 +139,7 @@ function Cart({ newProduct }) {
       <h1>My cart</h1>
 
       {newProduct.map((p) => (
-        <div>
+        <div key={p.id}>
           <h1>{p.name}</h1>
           <p>{p.description}</p>
           <p>{p.price}</p>
