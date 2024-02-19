@@ -29,33 +29,33 @@ const products = [
     price: 99,
     image: require("../images/product-3.png"),
   },
-  {
-    id: 4,
-    name: "Lorem ipsum dolor",
-    rating: 4.8,
-    description:
-      "Duis nibh sapien, placerat non nulla ac, suscipit laoreet tortor.",
-    price: 119,
-    image: require("../images/product-4.png"),
-  },
-  {
-    id: 5,
-    name: "Ultrices nisl",
-    rating: 4.5,
-    description:
-      "Phasellus condimentum, ante et dictum placerat, nulla ipsum commodo lorem, ut mollis nibh turpis a metus.",
-    price: 85,
-    image: require("../images/product-5.jpg"),
-  },
-  {
-    id: 6,
-    name: "Curabitur in elementum tortor",
-    rating: 3.8,
-    description:
-      " Mauris convallis diam nibh, non malesuada enim facilisis non. Etiam sapien augue, molestie a porta sed",
-    price: 149,
-    image: require("../images/product-1.png"),
-  },
+  // {
+  //   id: 4,
+  //   name: "Lorem ipsum dolor",
+  //   rating: 4.8,
+  //   description:
+  //     "Duis nibh sapien, placerat non nulla ac, suscipit laoreet tortor.",
+  //   price: 119,
+  //   image: require("../images/product-4.png"),
+  // },
+  // {
+  //   id: 5,
+  //   name: "Ultrices nisl",
+  //   rating: 4.5,
+  //   description:
+  //     "Phasellus condimentum, ante et dictum placerat, nulla ipsum commodo lorem, ut mollis nibh turpis a metus.",
+  //   price: 85,
+  //   image: require("../images/product-5.jpg"),
+  // },
+  // {
+  //   id: 6,
+  //   name: "Curabitur in elementum tortor",
+  //   rating: 3.8,
+  //   description:
+  //     " Mauris convallis diam nibh, non malesuada enim facilisis non. Etiam sapien augue, molestie a porta sed",
+  //   price: 149,
+  //   image: require("../images/product-1.png"),
+  // },
 ];
 
 export default function ShoppingCart() {
@@ -63,25 +63,44 @@ export default function ShoppingCart() {
   const [product, setProduct] = useState("");
   const [newProduct, setNewProduct] = useState([]);
 
-  function showCart(product) {
-    setIsOpen(product);
-  }
+  // function showCart(product) {
+  //   setIsOpen(product);
+  // }
 
-  function addToCart() {
-    console.log(product);
-    setIsOpen(true);
+  function addToCart(product) {
+    console.log("ke");
+    const exist = newProduct.find((ex) => ex.id === product.id);
+
+    if (exist) {
+      setNewProduct(
+        newProduct.map((ex) =>
+          ex.id === product.id ? { ...exist, id: exist.id + 1 } : ex
+        )
+      );
+    } else {
+      setNewProduct([...newProduct, { ...product, id: 1 }]);
+    }
   }
 
   return (
     <div className="App">
-      {isOpen && <Logo />}
+      <Logo product={product} onSetpro={setProduct} />
       <ProductList onAddToCart={addToCart} />
+      <Cart newProduct={newProduct} />
     </div>
   );
 }
 
-function Logo() {
-  return <h1>Cart</h1>;
+function Logo({ product, onSetpro }) {
+  return (
+    <div>
+      <button>Cart</button>
+
+      <h1>{product.name}</h1>
+      <p>{product.description}</p>
+      <p>{product.price}</p>
+    </div>
+  );
 }
 
 function ProductList({ onAddToCart }) {
@@ -107,9 +126,25 @@ function Product({ product, onAddToCart }) {
       <h1>{product.name}</h1>
       <p>{product.description}</p>
       <p>{product.price}</p>
-      <button className="button" onClick={onAddToCart}>
+      <button className="button" onClick={() => onAddToCart(product)}>
         Add to cart
       </button>
     </li>
+  );
+}
+
+function Cart({ newProduct }) {
+  return (
+    <div>
+      <h1>My cart</h1>
+
+      {newProduct.map((p) => (
+        <div>
+          <h1>{p.name}</h1>
+          <p>{p.description}</p>
+          <p>{p.price}</p>
+        </div>
+      ))}
+    </div>
   );
 }
